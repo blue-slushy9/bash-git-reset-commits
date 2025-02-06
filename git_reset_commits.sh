@@ -44,14 +44,16 @@ function split_url() {
 # git_operations function to make all required changes to repo, then push
 function git_operations() {
   local repo="$1"
+  local full_url="$2"
   # We cd into the cloned repo to make the changes
   cd "$repo"
   rm -rf .git
   git init
+  git remote add origin "$full_url"
   git add .
   git commit -m "Cleaned up commits."
-  git push -u origin main
-  echo "$repo has had its commits cleared and changes pushed."
+  git push -fu origin main
+  echo "$repo has had its commits cleared and changes pushed to $full_url"
   # We need to cd back into bash-git-reset-commits/ to continue the chain
   cd ..
 }
@@ -67,7 +69,7 @@ function clone_repo() {
   local repo=$(split_url "$user_repo")
   #cd "$repo"
   # Call git_operations function to make all required changes to repo, then push
-  git_operations "$repo"
+  git_operations "$repo" "$full_url"
 }
 
 # Define base GitHub URL
