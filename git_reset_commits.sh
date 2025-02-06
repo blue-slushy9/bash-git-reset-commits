@@ -72,9 +72,6 @@ function clone_repo() {
   git_operations "$repo" "$full_url"
 }
 
-# Define base GitHub URL
-#gh_url="https://github.com/"
-
 # Define function that will iterate over new_user_and_repos, splice the strings
 # to create the full URL, clone the repo, make the changes, commit and push
 function join_url_strings() {
@@ -82,17 +79,14 @@ function join_url_strings() {
   local -i n=0
   # Define base GitHub URL
   local gh_url="https://github.com/"
-  # Capture the GitHub URL passed to the function
-  #local gh_url="$1"
   # Capture all array elements passed to the function
   local new_user_repos=("$@")
   for user_repo in "${new_user_repos[@]}"; do
-    if [[ "$url" != "$user_repo" ]]; then
+  # Added this because I was getting "GitHub.com" as the first repo for some reason  
+  if [[ "$url" != "$user_repo" ]]; then
       local full_url="$gh_url$user_repo"
-      # Call the clone_repo() function
+      # Call the clone_repo() function, the other functions are nested in it
       clone_repo "$full_url" "$user_repo"
-      # Test print statement
-      #echo "full URL: $full_url"
       n+=1
     fi
   done
